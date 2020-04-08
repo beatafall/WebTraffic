@@ -1,0 +1,420 @@
+﻿@model  WebTraffic.Models.TransportModel
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/app")
+}
+
+@Styles.Render("~/Content/Site.css")
+
+<style>
+    #map {
+        height: 500px;
+        max-width: 100%;
+    }
+
+    .infoDiv {
+        height: 170px;
+        width: 300px;
+        -webkit-user-select: none;
+        background-color: white;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    #infowindowBtn {
+        background-color: #7094db;
+    }
+
+    .newBusForm {
+        padding: 120px;
+    }
+
+    .modal-content {
+        background-color: burlywood;
+    }
+
+    .title {
+        padding-bottom: 30px;
+        padding-top: 20px;
+        text-align: center;
+        color: #003366;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    .messageTitle {
+        padding-bottom: 30px;
+        padding-top: 20px;
+        text-align: center;
+        color: darkred;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    .backgroung {
+        background-color: #d1d1e0;
+    }
+
+    .box-item {
+        margin: 10px;
+        border-radius: 25px;
+        padding: 20px;
+        background-color: white;
+    }
+
+    .drivermessage-item {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        margin-left: 20px;
+        color: darkred;
+    }
+
+    .passengermessage-item {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        margin-left: 20px;
+        color: darkred;
+        padding-bottom: 25px;
+        padding-top: 25px;
+    }
+
+    .lineClass {
+        display: flex;
+        padding-bottom: 5px;
+        padding-top: 15px;
+    }
+
+    .send {
+        border-color: #6b552f;
+        background-color: #5f4e31ad;
+        color: white;
+        padding-left: 118px;
+        padding-right: 118px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .lineClass {
+        padding-left: 20px;
+    }
+
+    .lineClassItem {
+        padding-right: 5px;
+        color: #33334d;
+    }
+
+    #selectLine {
+        color: white;
+        padding-left: 40px;
+        margin-bottom: 19px;
+        padding-right: 40px;
+        background-color: lightslategray;
+        border-color: snow;
+    }
+
+    #deleteMessage {
+        color: white;
+        background-color: darkred;
+        margin-left: 960px;
+        margin-top: 10px;
+        padding: 15px;
+    }
+</style>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="bootstrap/js/bootrstap.min.js"></script>
+<script src="~/Scripts/knockout-3.5.1.js"></script>
+<script src="~/Scripts/knockout-3.5.1.debug.js"></script>
+
+<script type="text/javascript">
+    function form() {
+        $(document).ready(function () {
+            $('#infowindowBtn').click(function () {
+                $('#form').modal('show');
+            });
+        });
+    }
+
+    function deleteMessage() {
+        var eDiv = document.getElementById("oneMessage");
+        eDiv.parentNode.removeChild(eDiv);
+    }
+
+    function newBusLine() {
+        $(document).ready(function () {
+            $("#newBus").click(function () {
+                var DriverId = $("#driver").val();
+                var Line = $("#line").val();
+                var Bus = $("#bus").val();
+                var Date = $("#date").val();
+                try {
+                    $.ajax({
+                        url: "http://localhost:50500/api/busdriver",
+                        type: 'POST',
+                        data: JSON.stringify({
+                            "buszId": Bus,
+                            "soforId": DriverId,
+                            "vonalId": Line,
+                            "datum": Date
+                        }),
+                        contentType: 'application/json; charset=utf-8',
+                        success: successCallback
+                    });
+                }
+                catch (e) {
+                    window.location.href = "http://localhost:50500";
+                }  
+                function successCallback(data) {
+                    document.getElementById("msg").style.visibility = "visible";      
+                }  
+            });
+        });
+    }
+
+</script>
+
+<body class="backgroung">
+
+    <div class="row">
+        <h1 class="title">Forgalom szabályozása</h1>
+    </div>
+
+    <div class="row lineClass">
+
+        <h4 class="lineClassItem">Válassza ki melyik vonalat szeretné megjeleníteni a térképen: </h4>
+
+        <div class="form-group lineClassItem">
+            <select class="form-control" id="lines"
+                    data-bind="options: lines, optionsText: 'Line', optionsValue: 'Line', value: 'Line',
+                                    optionsCaption: 'Válassza ki a vonalat!'"></select>
+        </div>
+
+        <button type="submit" id="selectLine" class="btn btn-primary" onclick="selectLine();">OK</button>
+
+    </div>
+
+    <div id="map">
+        <script type="text/javascript">
+
+            var markers = [];
+
+            function InitializeMap() {
+                var latlng = new google.maps.LatLng(46.54390, 24.56020);
+
+                var myOptions = {
+                    zoom: 13,
+                    center: latlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                var map = new google.maps.Map(document.getElementById("map"), myOptions);
+                
+                $(document).ready(function () {
+
+                    $("#selectLine").click(function () {
+
+                        var Line = $("#lines").val();
+
+                        var busImg = "http://maps.google.com/mapfiles/kml/shapes/bus.png";
+                           
+                        $.ajax({
+                            url: "http://localhost:50500/api/busesontheroad/" + Line,
+                            type: 'GET',
+                            success: function (data) {
+
+                                $.each(data, function (index, value) {
+                                    var latlngStation = new google.maps.LatLng(value.lat, value.lon);
+                                    var marker = new google.maps.Marker({
+                                        position: latlngStation,
+                                        title: "A busz legutóbbi tartózkodósának ideje: " + value.Date,
+                                        icon: {
+                                            url: busImg,
+                                            scaledSize: new google.maps.Size(40, 40)
+                                        },
+                                        map: map
+                                    });
+
+                                    markers.push(marker);
+
+                                });
+                            }
+                        });
+                    });
+                });
+
+                var stationImg = "http://maps.google.com/mapfiles/kml/paddle/red-circle.png";
+                $(document).ready(function () {
+
+                    $("#selectLine").click(function () {
+
+                        var Line = $("#lines").val();
+
+                        $.ajax({
+                            url: "http://localhost:50500/api/LineStation/" + Line,
+                            type: 'GET',
+                            success: function (data) {
+
+                                $.each(data, function (index, value) {
+                                    var latlngStation = new google.maps.LatLng(value.lat, value.lon);
+                                    var marker = new google.maps.Marker({
+                                        position: latlngStation,
+                                        title: value.stationName,
+                                        icon: {
+                                            url: stationImg,
+                                            scaledSize: new google.maps.Size(30, 30)
+                                        },
+                                        map: map
+                                    });
+
+                                    markers.push(marker);
+
+                                });
+                            }
+                        });
+                    });
+                });
+
+                var messageImg = "http://maps.google.com/mapfiles/kml/shapes/post_office.png";
+                var infoWindow = new google.maps.InfoWindow();
+                @foreach(var item in Model.Messages)
+                {
+                        <text>
+                    var messageMarker = new google.maps.Marker({
+                    position: new google.maps.LatLng(parseFloat('@item.MessageLat'), parseFloat('@item.MessageLon')),
+                    title: '@item.MessageTypeName',
+                    icon:
+                        {
+                        url: messageImg,
+                        scaledSize: new google.maps.Size(40, 40)
+                    },
+                    map: map
+                    });
+
+                    (function (messageMarker) {
+                            google.maps.event.addListener(messageMarker, "click", function (e) {
+                                infoWindow.setContent(
+                                    @if (@item.DriverName.IsEmpty())
+                                {
+                                  <text>
+                                "<div class='infoDiv'><h4> Üzenet: </h4>"
+                                    + "<div><h6>Jelzés: " + '@item.MessageTypeName' + "</h6>"
+                                    + "<h6>Vonal száma: " + '@item.Line' + "</h6>"
+                                    + "<h6>Busz koordinátái: " + '@item.MessageLat' + ", " + '@item.MessageLon' + "</h6>"
+                                    + "<h6>Dátum: " + '@item.MessageDate' + "</h6> </div>"
+                                    + '<button id="infowindowBtn" onclick="window.form();"> Új busz menetbe állítása </button></div> ');
+                                </text>
+                                }
+                                else
+                                {
+                                 <text>
+                                    "<div class='infoDiv'><h4> Üzenet: </h4>"
+                                    + "<div><h6>Soför neve: " + '@item.DriverName' + "</h6>"
+                                    + "<h6>Jelzés: " + '@item.MessageTypeName' + "</h6>"
+                                    + "<h6>Vonal száma: " + '@item.Line' + "</h6>"
+                                    + "<h6>Busz száma: " + '@item.Bus' + "</h6>"
+                                    + "<h6>Busz koordinátái: " + '@item.MessageLat' + ", " + '@item.MessageLon' + "</h6>"
+                                    + "<h6>Dátum: " + '@item.MessageDate' + "</h6> </div>"
+                                    + '<button id="infowindowBtn" onclick="window.form();"> Új busz menetbe állítása </button></div> ');
+                                </text>
+
+                                 }
+
+                                infoWindow.open(map, messageMarker);
+
+                                });
+                    })(messageMarker);
+
+                        </text>
+                    }
+
+            }
+
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4vnybDqRKbtXEWxhq-QG34SkBNPwKtP0&callback=InitializeMap" async defer></script>
+
+    </div>
+
+    <div class="modal fade" id="form">
+        <div class="modal-dialog modal-lg newBusForm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        x
+                    </button>
+                    <h3 class="modal-title" style="text-align: center; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Új busz menetbe állítása</h3>
+                </div>
+                <div class="modal-body" style="margin-left: 170px;">
+                    <form>
+                        <div class="form-group">
+                            Sofőr:
+                            <select class="form-control" id="driver"
+                                    data-bind="options: driver, optionsText: 'DriverName' ,optionsValue: 'Id', value: 'Id',
+                                    optionsCaption: 'Válassza ki a sofört!'"></select>
+                        </div>
+                        <div class="form-group">
+                            Vonal:
+                            <select class="form-control" id="line"
+                                    data-bind="options: lines, optionsText: 'Line' ,optionsValue: 'Line', value: 'Line',
+                                optionsCaption: 'Válassza ki a vonalat!'"></select>
+                        </div>
+                        <div class="form-group">
+                            Busz:
+                            <select class="form-control" id="bus"
+                                    data-bind="options: garage, optionsText: 'BusId', optionsValue: 'BusId', value: 'BusId',
+                                    optionsCaption: 'Válassza ki a buszt!'"></select>
+                        </div>
+                        <div class="form-group">
+                            Dátum:
+                            <input class="form-control" type="datetime-local" id="date" />
+                        </div>
+                    </form>
+                    <button type="submit" id="newBus" class="btn btn-primary send" onclick="newBusLine();">Küldés</button>
+                    <p id="msg" style="visibility:hidden; padding-left: 40px; padding-top: 5px; padding-bottom:10px; color:darkred; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size:16px;"> Sikeresen elküldte az üzenetet! </p> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="overlay">
+        <div class="row">
+            <h1 class="messageTitle">Üzentek</h1>
+        </div>
+        <div class="row">
+            @foreach (var item in Model.Messages)
+            {
+                <text>
+                    <div class="box-item col-xs-3" style="width: 31%;" id="oneMessage">
+                        @if (@item.DriverName.IsEmpty())
+                        {
+
+                            <div class="passengermessage-item">
+                                <h5>Jelzés: @item.MessageTypeName</h5>
+                                <h5>Vonal száma: @item.Line</h5>
+                                <h5>Busz koordinátái: @item.MessageLat, @item.MessageLon</h5>
+                                <h5>Dátum: @item.MessageDate</h5>
+                            </div>
+
+                        }
+                        else
+                        {
+                            <div class="drivermessage-item">
+                                <h5>Soför neve: @item.DriverName</h5>
+                                <h5>Jelzés: @item.MessageTypeName</h5>
+                                <h5>Vonal száma: @item.Line</h5>
+                                <h5>Busz száma: @item.Bus</h5>
+                                <h5>Busz koordinátái: @item.MessageLat, @item.MessageLon</h5>
+                                <h5>Dátum: @item.MessageDate</h5>
+                            </div>
+
+                        }
+
+                    </div>
+                </text>
+            }
+
+        </div>
+        <div class="row">
+            <button name="removeMess" id="deleteMessage" class="btn" onclick="deleteMessage(this)" type="button">Legrégebbi üzenet törlése</button>
+        </div>
+    </div>
+</body>

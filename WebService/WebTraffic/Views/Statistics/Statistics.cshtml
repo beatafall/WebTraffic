@@ -1,0 +1,170 @@
+﻿
+
+@{
+    ViewBag.Title = "Statistics";
+}
+
+<script type="text/javascript" src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="~/Scripts/Chart.js"></script>
+<script src="~/Scripts/Chart.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+   function drawChart() {   
+
+        $.post('/Statistics/GetAccidents/', {}, function (data) {
+            var dt = new google.visualization.DataTable();
+
+            dt.addColumn('string', 'DriverName');
+            dt.addColumn('number', 'CountAccident');
+
+            for (var i = 0; i < data.length; i++) {
+                dt.addRow([data[i].DriverName, data[i].CountAccident]);
+            }
+
+            var options = {
+                title: "Balesetet okozó sofőrök",
+                is3D: true
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('accidentChart'));
+            chart.draw(dt, options);
+       });
+       
+       $.post('/Statistics/GetCrowdedLines/', {}, function (data) {
+           var dt = new google.visualization.DataTable();
+
+           dt.addColumn('string', 'Line');
+           dt.addColumn('number', 'CrowdedCounter');
+
+           for (var i = 0; i < data.length; i++) {
+               dt.addRow([data[i].Line, data[i].CrowdedCounter]);
+           }
+
+           var options = {
+               title: "Legzsúfoltabb vonalak",
+               is3D: true
+           };
+
+           var chart = new google.visualization.PieChart(document.getElementById('crowdedLinesChart'));
+           chart.draw(dt, options);
+       });
+
+       $.post('/Statistics/GetCrasdedBuses/', {}, function (data) {
+           var dt = new google.visualization.DataTable();
+
+           dt.addColumn('string', 'Bus');
+           dt.addColumn('number', 'BusCrashedCounter');
+
+           for (var i = 0; i < data.length; i++) {
+               dt.addRow([data[i].Bus, data[i].BusCrashedCounter]);
+           }
+
+           var options = {
+               title: "Legtöbbször lerobbant buszok",
+               is3D: true
+           };
+
+           var chart = new google.visualization.PieChart(document.getElementById('crasedBusesChart'));
+           chart.draw(dt, options);
+       });
+
+       $.post('/Statistics/GetTrafficTime/', {}, function (data) {
+           var dt = new google.visualization.DataTable();
+
+           dt.addColumn('string', 'DateTime');
+           dt.addColumn('number', 'Bejovő jelzésének száma');
+
+           for (var i = 0; i < data.length; i++) {
+               dt.addRow([data[i].DateTime + ' óra', data[i].Counter]);
+           }
+
+          /* var options = {
+               title: "Hány órakór van a legnagyobb forgalom",
+               is3D: true
+           };*/
+           var options = {
+               title: 'Hány órakór van a legnagyobb forgalom',
+               vAxis: { title: 'Jelzések száma' },
+               hAxis: { title: 'Idő' },
+               seriesType: 'bars',
+               series: { 2: { type: 'line' } }
+           };
+
+
+           var chart = new google.visualization.ComboChart(document.getElementById('trafficTimeChart'));
+           chart.draw(dt, options);
+       });
+
+       $.post('/Statistics/GetCrowdedBusesTime/', {}, function (data) {
+           var dt = new google.visualization.DataTable();
+
+           dt.addColumn('string', 'DateTime');
+           dt.addColumn('number', 'Counter');
+
+           for (var i = 0; i < data.length; i++) {
+               dt.addRow([data[i].DateTime + ' óra', data[i].Counter]);
+           }
+
+           var options = {
+               title: "Hány órakór van túlzsúfóltság a buszokon",
+               is3D: true
+           };
+
+           var chart = new google.visualization.PieChart(document.getElementById('crowdedBusesTimeChart'));
+           chart.draw(dt, options);         
+       });
+    }
+     
+</script>
+
+<style type="text/css">
+    .title {
+        padding-bottom: 30px;
+        padding-top: 20px;
+        text-align: center;
+        color: #003366;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    .backgroung {
+        background-color: #d1d1e0;
+    }
+    .leftDiv {
+        float: left;
+    }
+
+    .rightDiv {
+        float: right;
+    }
+    .outerDiv {
+        margin-right: 55px;
+        margin-left: 55px;
+        height: 320px;
+    }
+</style>
+
+<body class="backgroung">
+    <div class="row">
+        <h1 class="title"> Statisztikák </h1>
+
+        <div class="outerDiv">
+            <div class="leftDiv" id="accidentChart" style="width: 500px; height: 300px;"> </div>
+            <div class="rightDiv" id="crowdedLinesChart" style="width: 500px; height: 300px;"> </div>
+        </div>
+
+        <div class="outerDiv">
+            <div class="leftDiv" id="crasedBusesChart" style="width: 500px; height: 300px;"> </div>
+            <div class="rightDiv" id="trafficTimeChart" style="width: 500px; height: 300px;"> </div>
+        </div>
+
+        <div class="outerDiv">
+            <div class="leftDiv" id="crowdedBusesTimeChart" style="width: 500px; height: 300px;"> </div>
+        </div>
+
+    </div>
+</body>

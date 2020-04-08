@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="trafficModelStoreContainer" CdmEntityContainer="trafficEntities">
+    <EntitySetMapping Name="Buszs">
+      <EntityTypeMapping TypeName="trafficModel.Busz">
+        <MappingFragment StoreEntitySet="Busz">
+          <ScalarProperty Name="buszId" ColumnName="buszId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BuszAllapots">
+      <EntityTypeMapping TypeName="trafficModel.BuszAllapot">
+        <MappingFragment StoreEntitySet="BuszAllapot">
+          <ScalarProperty Name="buszAllapotId" ColumnName="buszAllapotId" />
+          <ScalarProperty Name="buszAllapot1" ColumnName="buszAllapot" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Garazs">
+      <EntityTypeMapping TypeName="trafficModel.Garaz">
+        <MappingFragment StoreEntitySet="Garazs">
+          <ScalarProperty Name="garazsid" ColumnName="garazsid" />
+          <ScalarProperty Name="buszId" ColumnName="buszId" />
+          <ScalarProperty Name="buszAllapotId" ColumnName="buszAllapotId" />
+          <ScalarProperty Name="datum" ColumnName="datum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Jelzes">
+      <EntityTypeMapping TypeName="trafficModel.Jelze">
+        <MappingFragment StoreEntitySet="Jelzes">
+          <ScalarProperty Name="jelzesId" ColumnName="jelzesId" />
+          <ScalarProperty Name="jelzesNev" ColumnName="jelzesNev" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Megalloks">
+      <EntityTypeMapping TypeName="trafficModel.Megallok">
+        <MappingFragment StoreEntitySet="Megallok">
+          <ScalarProperty Name="megalloId" ColumnName="megalloId" />
+          <ScalarProperty Name="lon" ColumnName="lon" />
+          <ScalarProperty Name="lat" ColumnName="lat" />
+          <ScalarProperty Name="megalloNev" ColumnName="megalloNev" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sofors">
+      <EntityTypeMapping TypeName="trafficModel.Sofor">
+        <MappingFragment StoreEntitySet="Sofor">
+          <ScalarProperty Name="soforId" ColumnName="soforId" />
+          <ScalarProperty Name="soforNev" ColumnName="soforNev" />
+          <ScalarProperty Name="soforJelszo" ColumnName="soforJelszo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Uzenets">
+      <EntityTypeMapping TypeName="trafficModel.Uzenet">
+        <MappingFragment StoreEntitySet="Uzenet">
+          <ScalarProperty Name="uzenetId" ColumnName="uzenetId" />
+          <ScalarProperty Name="jelzesId" ColumnName="jelzesId" />
+          <ScalarProperty Name="soforId" ColumnName="soforId" />
+          <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+          <ScalarProperty Name="buszId" ColumnName="buszId" />
+          <ScalarProperty Name="datum" ColumnName="datum" />
+          <ScalarProperty Name="lon" ColumnName="lon" />
+          <ScalarProperty Name="lat" ColumnName="lat" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vonals">
+      <EntityTypeMapping TypeName="trafficModel.Vonal">
+        <MappingFragment StoreEntitySet="Vonal">
+          <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VonalBuszs">
+      <EntityTypeMapping TypeName="trafficModel.VonalBusz">
+        <MappingFragment StoreEntitySet="VonalBusz">
+          <ScalarProperty Name="vonalbuszId" ColumnName="vonalbuszId" />
+          <ScalarProperty Name="buszId" ColumnName="buszId" />
+          <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+          <ScalarProperty Name="datum" ColumnName="datum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VonalBuszSofors">
+      <EntityTypeMapping TypeName="trafficModel.VonalBuszSofor">
+        <MappingFragment StoreEntitySet="VonalBuszSofor">
+          <ScalarProperty Name="vonalbuszsoforId" ColumnName="vonalbuszsoforId" />
+          <ScalarProperty Name="buszId" ColumnName="buszId" />
+          <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+          <ScalarProperty Name="soforId" ColumnName="soforId" />
+          <ScalarProperty Name="datum" ColumnName="datum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VonalMegalloks">
+      <EntityTypeMapping TypeName="trafficModel.VonalMegallok">
+        <MappingFragment StoreEntitySet="VonalMegallok">
+          <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+          <ScalarProperty Name="megalloId" ColumnName="megalloId" />
+          <ScalarProperty Name="vonalMegalloiId" ColumnName="vonalMegalloiId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Felszallas">
+      <EntityTypeMapping TypeName="trafficModel.Felszalla">
+        <MappingFragment StoreEntitySet="Felszallas">
+          <ScalarProperty Name="lat" ColumnName="lat" />
+          <ScalarProperty Name="lon" ColumnName="lon" />
+          <ScalarProperty Name="datum" ColumnName="datum" />
+          <ScalarProperty Name="buszId" ColumnName="buszId" />
+          <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+          <ScalarProperty Name="felszallasId" ColumnName="felszallasId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

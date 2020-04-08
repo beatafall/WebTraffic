@@ -1,0 +1,900 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="trafficModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Busz">
+          <Key>
+            <PropertyRef Name="buszId" />
+          </Key>
+          <Property Name="buszId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BuszAllapot">
+          <Key>
+            <PropertyRef Name="buszAllapotId" />
+          </Key>
+          <Property Name="buszAllapotId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="buszAllapot" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Felszallas">
+          <Key>
+            <PropertyRef Name="felszallasId" />
+          </Key>
+          <Property Name="felszallasId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vonalId" Type="int" />
+          <Property Name="buszId" Type="int" />
+          <Property Name="datum" Type="datetime" />
+          <Property Name="lon" Type="numeric" Precision="10" Scale="5" />
+          <Property Name="lat" Type="numeric" Precision="10" Scale="5" />
+        </EntityType>
+        <EntityType Name="Garazs">
+          <Key>
+            <PropertyRef Name="garazsid" />
+          </Key>
+          <Property Name="garazsid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="buszId" Type="int" />
+          <Property Name="buszAllapotId" Type="int" />
+          <Property Name="datum" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Jelzes">
+          <Key>
+            <PropertyRef Name="jelzesId" />
+          </Key>
+          <Property Name="jelzesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="jelzesNev" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Megallok">
+          <Key>
+            <PropertyRef Name="megalloId" />
+          </Key>
+          <Property Name="megalloId" Type="int" Nullable="false" />
+          <Property Name="lon" Type="numeric" Precision="10" Scale="5" />
+          <Property Name="lat" Type="numeric" Precision="10" Scale="5" />
+          <Property Name="megalloNev" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Sofor">
+          <Key>
+            <PropertyRef Name="soforId" />
+          </Key>
+          <Property Name="soforId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="soforNev" Type="varchar" MaxLength="50" />
+          <Property Name="soforJelszo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Uzenet">
+          <Key>
+            <PropertyRef Name="uzenetId" />
+          </Key>
+          <Property Name="uzenetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="jelzesId" Type="int" />
+          <Property Name="soforId" Type="int" />
+          <Property Name="vonalId" Type="int" />
+          <Property Name="buszId" Type="int" />
+          <Property Name="datum" Type="datetime2" Precision="7" />
+          <Property Name="lon" Type="numeric" Precision="10" Scale="5" />
+          <Property Name="lat" Type="numeric" Precision="10" Scale="5" />
+        </EntityType>
+        <EntityType Name="Vonal">
+          <Key>
+            <PropertyRef Name="vonalId" />
+          </Key>
+          <Property Name="vonalId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VonalBusz">
+          <Key>
+            <PropertyRef Name="vonalbuszId" />
+          </Key>
+          <Property Name="vonalbuszId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="buszId" Type="int" />
+          <Property Name="vonalId" Type="int" />
+          <Property Name="datum" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="VonalBuszSofor">
+          <Key>
+            <PropertyRef Name="vonalbuszsoforId" />
+          </Key>
+          <Property Name="vonalbuszsoforId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="buszId" Type="int" />
+          <Property Name="vonalId" Type="int" />
+          <Property Name="soforId" Type="int" />
+          <Property Name="datum" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="VonalMegallok">
+          <Key>
+            <PropertyRef Name="vonalMegalloiId" />
+          </Key>
+          <Property Name="vonalMegalloiId" Type="int" Nullable="false" />
+          <Property Name="megalloId" Type="int" />
+          <Property Name="vonalId" Type="int" />
+        </EntityType>
+        <Association Name="fk_felszallas">
+          <End Role="Vonal" Type="Self.Vonal" Multiplicity="0..1" />
+          <End Role="Felszallas" Type="Self.Felszallas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="Felszallas">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_felszallas2">
+          <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
+          <End Role="Felszallas" Type="Self.Felszallas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="Felszallas">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_garazs1">
+          <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
+          <End Role="Garazs" Type="Self.Garazs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="Garazs">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_garazs2">
+          <End Role="BuszAllapot" Type="Self.BuszAllapot" Multiplicity="0..1" />
+          <End Role="Garazs" Type="Self.Garazs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BuszAllapot">
+              <PropertyRef Name="buszAllapotId" />
+            </Principal>
+            <Dependent Role="Garazs">
+              <PropertyRef Name="buszAllapotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_uzenet1">
+          <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
+          <End Role="Uzenet" Type="Self.Uzenet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="Uzenet">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_uzenet2">
+          <End Role="Vonal" Type="Self.Vonal" Multiplicity="0..1" />
+          <End Role="Uzenet" Type="Self.Uzenet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="Uzenet">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_uzenet3">
+          <End Role="Sofor" Type="Self.Sofor" Multiplicity="0..1" />
+          <End Role="Uzenet" Type="Self.Uzenet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sofor">
+              <PropertyRef Name="soforId" />
+            </Principal>
+            <Dependent Role="Uzenet">
+              <PropertyRef Name="soforId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_uzenet4">
+          <End Role="Jelzes" Type="Self.Jelzes" Multiplicity="0..1" />
+          <End Role="Uzenet" Type="Self.Uzenet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Jelzes">
+              <PropertyRef Name="jelzesId" />
+            </Principal>
+            <Dependent Role="Uzenet">
+              <PropertyRef Name="jelzesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbusz1">
+          <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
+          <End Role="VonalBusz" Type="Self.VonalBusz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="VonalBusz">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbusz2">
+          <End Role="Vonal" Type="Self.Vonal" Multiplicity="0..1" />
+          <End Role="VonalBusz" Type="Self.VonalBusz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="VonalBusz">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbuszsofor1">
+          <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
+          <End Role="VonalBuszSofor" Type="Self.VonalBuszSofor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="VonalBuszSofor">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbuszsofor2">
+          <End Role="Vonal" Type="Self.Vonal" Multiplicity="0..1" />
+          <End Role="VonalBuszSofor" Type="Self.VonalBuszSofor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="VonalBuszSofor">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbuszsofor3">
+          <End Role="Sofor" Type="Self.Sofor" Multiplicity="0..1" />
+          <End Role="VonalBuszSofor" Type="Self.VonalBuszSofor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sofor">
+              <PropertyRef Name="soforId" />
+            </Principal>
+            <Dependent Role="VonalBuszSofor">
+              <PropertyRef Name="soforId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalmegallok">
+          <End Role="Megallok" Type="Self.Megallok" Multiplicity="0..1" />
+          <End Role="VonalMegallok" Type="Self.VonalMegallok" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Megallok">
+              <PropertyRef Name="megalloId" />
+            </Principal>
+            <Dependent Role="VonalMegallok">
+              <PropertyRef Name="megalloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalmegallok2">
+          <End Role="Vonal" Type="Self.Vonal" Multiplicity="0..1" />
+          <End Role="VonalMegallok" Type="Self.VonalMegallok" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="VonalMegallok">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="trafficModelStoreContainer">
+          <EntitySet Name="Busz" EntityType="Self.Busz" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BuszAllapot" EntityType="Self.BuszAllapot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Felszallas" EntityType="Self.Felszallas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Garazs" EntityType="Self.Garazs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Jelzes" EntityType="Self.Jelzes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Megallok" EntityType="Self.Megallok" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sofor" EntityType="Self.Sofor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Uzenet" EntityType="Self.Uzenet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vonal" EntityType="Self.Vonal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VonalBusz" EntityType="Self.VonalBusz" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VonalBuszSofor" EntityType="Self.VonalBuszSofor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VonalMegallok" EntityType="Self.VonalMegallok" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_felszallas" Association="Self.fk_felszallas">
+            <End Role="Vonal" EntitySet="Vonal" />
+            <End Role="Felszallas" EntitySet="Felszallas" />
+          </AssociationSet>
+          <AssociationSet Name="fk_felszallas2" Association="Self.fk_felszallas2">
+            <End Role="Busz" EntitySet="Busz" />
+            <End Role="Felszallas" EntitySet="Felszallas" />
+          </AssociationSet>
+          <AssociationSet Name="fk_garazs1" Association="Self.fk_garazs1">
+            <End Role="Busz" EntitySet="Busz" />
+            <End Role="Garazs" EntitySet="Garazs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_garazs2" Association="Self.fk_garazs2">
+            <End Role="BuszAllapot" EntitySet="BuszAllapot" />
+            <End Role="Garazs" EntitySet="Garazs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_uzenet1" Association="Self.fk_uzenet1">
+            <End Role="Busz" EntitySet="Busz" />
+            <End Role="Uzenet" EntitySet="Uzenet" />
+          </AssociationSet>
+          <AssociationSet Name="fk_uzenet2" Association="Self.fk_uzenet2">
+            <End Role="Vonal" EntitySet="Vonal" />
+            <End Role="Uzenet" EntitySet="Uzenet" />
+          </AssociationSet>
+          <AssociationSet Name="fk_uzenet3" Association="Self.fk_uzenet3">
+            <End Role="Sofor" EntitySet="Sofor" />
+            <End Role="Uzenet" EntitySet="Uzenet" />
+          </AssociationSet>
+          <AssociationSet Name="fk_uzenet4" Association="Self.fk_uzenet4">
+            <End Role="Jelzes" EntitySet="Jelzes" />
+            <End Role="Uzenet" EntitySet="Uzenet" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbusz1" Association="Self.fk_vonalbusz1">
+            <End Role="Busz" EntitySet="Busz" />
+            <End Role="VonalBusz" EntitySet="VonalBusz" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbusz2" Association="Self.fk_vonalbusz2">
+            <End Role="Vonal" EntitySet="Vonal" />
+            <End Role="VonalBusz" EntitySet="VonalBusz" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbuszsofor1" Association="Self.fk_vonalbuszsofor1">
+            <End Role="Busz" EntitySet="Busz" />
+            <End Role="VonalBuszSofor" EntitySet="VonalBuszSofor" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbuszsofor2" Association="Self.fk_vonalbuszsofor2">
+            <End Role="Vonal" EntitySet="Vonal" />
+            <End Role="VonalBuszSofor" EntitySet="VonalBuszSofor" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbuszsofor3" Association="Self.fk_vonalbuszsofor3">
+            <End Role="Sofor" EntitySet="Sofor" />
+            <End Role="VonalBuszSofor" EntitySet="VonalBuszSofor" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalmegallok" Association="Self.fk_vonalmegallok">
+            <End Role="Megallok" EntitySet="Megallok" />
+            <End Role="VonalMegallok" EntitySet="VonalMegallok" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalmegallok2" Association="Self.fk_vonalmegallok2">
+            <End Role="Vonal" EntitySet="Vonal" />
+            <End Role="VonalMegallok" EntitySet="VonalMegallok" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="trafficModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Busz">
+          <Key>
+            <PropertyRef Name="buszId" />
+          </Key>
+          <Property Name="buszId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Garazs" Relationship="Self.fk_garazs1" FromRole="Busz" ToRole="Garazs" />
+          <NavigationProperty Name="Uzenets" Relationship="Self.fk_uzenet1" FromRole="Busz" ToRole="Uzenet" />
+          <NavigationProperty Name="VonalBuszs" Relationship="Self.fk_vonalbusz1" FromRole="Busz" ToRole="VonalBusz" />
+          <NavigationProperty Name="VonalBuszSofors" Relationship="Self.fk_vonalbuszsofor1" FromRole="Busz" ToRole="VonalBuszSofor" />
+          <NavigationProperty Name="Felszallas" Relationship="trafficModel.fk_felszallas2" FromRole="Busz" ToRole="Felszalla" />
+        </EntityType>
+        <EntityType Name="BuszAllapot">
+          <Key>
+            <PropertyRef Name="buszAllapotId" />
+          </Key>
+          <Property Name="buszAllapotId" Type="Int32" Nullable="false" />
+          <Property Name="buszAllapot1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Garazs" Relationship="Self.fk_garazs2" FromRole="BuszAllapot" ToRole="Garazs" />
+        </EntityType>
+        <EntityType Name="Garaz">
+          <Key>
+            <PropertyRef Name="garazsid" />
+          </Key>
+          <Property Name="garazsid" Type="Int32" Nullable="false" />
+          <Property Name="buszId" Type="Int32" />
+          <Property Name="buszAllapotId" Type="Int32" />
+          <Property Name="datum" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Busz" Relationship="Self.fk_garazs1" FromRole="Garazs" ToRole="Busz" />
+          <NavigationProperty Name="BuszAllapot" Relationship="Self.fk_garazs2" FromRole="Garazs" ToRole="BuszAllapot" />
+        </EntityType>
+        <EntityType Name="Jelze">
+          <Key>
+            <PropertyRef Name="jelzesId" />
+          </Key>
+          <Property Name="jelzesId" Type="Int32" Nullable="false" />
+          <Property Name="jelzesNev" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Uzenets" Relationship="Self.fk_uzenet4" FromRole="Jelzes" ToRole="Uzenet" />
+        </EntityType>
+        <EntityType Name="Megallok">
+          <Key>
+            <PropertyRef Name="megalloId" />
+          </Key>
+          <Property Name="megalloId" Type="Int32" Nullable="false" />
+          <Property Name="lon" Type="Decimal" Precision="10" Scale="5" />
+          <Property Name="lat" Type="Decimal" Precision="10" Scale="5" />
+          <Property Name="megalloNev" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="VonalMegalloks" Relationship="trafficModel.fk_vonalmegallok" FromRole="Megallok" ToRole="VonalMegallok" />
+        </EntityType>
+        <EntityType Name="Sofor">
+          <Key>
+            <PropertyRef Name="soforId" />
+          </Key>
+          <Property Name="soforId" Type="Int32" Nullable="false" />
+          <Property Name="soforNev" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="soforJelszo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Uzenets" Relationship="Self.fk_uzenet3" FromRole="Sofor" ToRole="Uzenet" />
+          <NavigationProperty Name="VonalBuszSofors" Relationship="Self.fk_vonalbuszsofor3" FromRole="Sofor" ToRole="VonalBuszSofor" />
+        </EntityType>
+        <EntityType Name="Uzenet">
+          <Key>
+            <PropertyRef Name="uzenetId" />
+          </Key>
+          <Property Name="uzenetId" Type="Int32" Nullable="false" />
+          <Property Name="jelzesId" Type="Int32" />
+          <Property Name="soforId" Type="Int32" />
+          <Property Name="vonalId" Type="Int32" />
+          <Property Name="buszId" Type="Int32" />
+          <Property Name="datum" Type="DateTime" Precision="7" />
+          <Property Name="lon" Type="Decimal" Precision="10" Scale="5" />
+          <Property Name="lat" Type="Decimal" Precision="10" Scale="5" />
+          <NavigationProperty Name="Busz" Relationship="Self.fk_uzenet1" FromRole="Uzenet" ToRole="Busz" />
+          <NavigationProperty Name="Jelze" Relationship="Self.fk_uzenet4" FromRole="Uzenet" ToRole="Jelzes" />
+          <NavigationProperty Name="Sofor" Relationship="Self.fk_uzenet3" FromRole="Uzenet" ToRole="Sofor" />
+          <NavigationProperty Name="Vonal" Relationship="Self.fk_uzenet2" FromRole="Uzenet" ToRole="Vonal" />
+        </EntityType>
+        <EntityType Name="Vonal">
+          <Key>
+            <PropertyRef Name="vonalId" />
+          </Key>
+          <Property Name="vonalId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Uzenets" Relationship="Self.fk_uzenet2" FromRole="Vonal" ToRole="Uzenet" />
+          <NavigationProperty Name="VonalBuszs" Relationship="Self.fk_vonalbusz2" FromRole="Vonal" ToRole="VonalBusz" />
+          <NavigationProperty Name="VonalBuszSofors" Relationship="Self.fk_vonalbuszsofor2" FromRole="Vonal" ToRole="VonalBuszSofor" />
+          <NavigationProperty Name="VonalMegalloks" Relationship="trafficModel.fk_vonalmegallok2" FromRole="Vonal" ToRole="VonalMegallok" />
+          <NavigationProperty Name="Felszallas" Relationship="trafficModel.fk_felszallas" FromRole="Vonal" ToRole="Felszalla" />
+        </EntityType>
+        <EntityType Name="VonalBusz">
+          <Key>
+            <PropertyRef Name="vonalbuszId" />
+          </Key>
+          <Property Name="vonalbuszId" Type="Int32" Nullable="false" />
+          <Property Name="buszId" Type="Int32" />
+          <Property Name="vonalId" Type="Int32" />
+          <Property Name="datum" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Busz" Relationship="Self.fk_vonalbusz1" FromRole="VonalBusz" ToRole="Busz" />
+          <NavigationProperty Name="Vonal" Relationship="Self.fk_vonalbusz2" FromRole="VonalBusz" ToRole="Vonal" />
+        </EntityType>
+        <EntityType Name="VonalBuszSofor">
+          <Key>
+            <PropertyRef Name="vonalbuszsoforId" />
+          </Key>
+          <Property Name="vonalbuszsoforId" Type="Int32" Nullable="false" />
+          <Property Name="buszId" Type="Int32" />
+          <Property Name="vonalId" Type="Int32" />
+          <Property Name="soforId" Type="Int32" />
+          <Property Name="datum" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Busz" Relationship="Self.fk_vonalbuszsofor1" FromRole="VonalBuszSofor" ToRole="Busz" />
+          <NavigationProperty Name="Sofor" Relationship="Self.fk_vonalbuszsofor3" FromRole="VonalBuszSofor" ToRole="Sofor" />
+          <NavigationProperty Name="Vonal" Relationship="Self.fk_vonalbuszsofor2" FromRole="VonalBuszSofor" ToRole="Vonal" />
+        </EntityType>
+        <Association Name="fk_garazs1">
+          <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
+          <End Role="Garazs" Type="Self.Garaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="Garazs">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_uzenet1">
+          <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
+          <End Role="Uzenet" Type="Self.Uzenet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="Uzenet">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbusz1">
+          <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
+          <End Role="VonalBusz" Type="Self.VonalBusz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="VonalBusz">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbuszsofor1">
+          <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
+          <End Role="VonalBuszSofor" Type="Self.VonalBuszSofor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="VonalBuszSofor">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_garazs2">
+          <End Role="BuszAllapot" Type="Self.BuszAllapot" Multiplicity="0..1" />
+          <End Role="Garazs" Type="Self.Garaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BuszAllapot">
+              <PropertyRef Name="buszAllapotId" />
+            </Principal>
+            <Dependent Role="Garazs">
+              <PropertyRef Name="buszAllapotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_uzenet4">
+          <End Role="Jelzes" Type="Self.Jelze" Multiplicity="0..1" />
+          <End Role="Uzenet" Type="Self.Uzenet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Jelzes">
+              <PropertyRef Name="jelzesId" />
+            </Principal>
+            <Dependent Role="Uzenet">
+              <PropertyRef Name="jelzesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_uzenet3">
+          <End Role="Sofor" Type="Self.Sofor" Multiplicity="0..1" />
+          <End Role="Uzenet" Type="Self.Uzenet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sofor">
+              <PropertyRef Name="soforId" />
+            </Principal>
+            <Dependent Role="Uzenet">
+              <PropertyRef Name="soforId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbuszsofor3">
+          <End Role="Sofor" Type="Self.Sofor" Multiplicity="0..1" />
+          <End Role="VonalBuszSofor" Type="Self.VonalBuszSofor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sofor">
+              <PropertyRef Name="soforId" />
+            </Principal>
+            <Dependent Role="VonalBuszSofor">
+              <PropertyRef Name="soforId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_uzenet2">
+          <End Role="Vonal" Type="Self.Vonal" Multiplicity="0..1" />
+          <End Role="Uzenet" Type="Self.Uzenet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="Uzenet">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbusz2">
+          <End Role="Vonal" Type="Self.Vonal" Multiplicity="0..1" />
+          <End Role="VonalBusz" Type="Self.VonalBusz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="VonalBusz">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalbuszsofor2">
+          <End Role="Vonal" Type="Self.Vonal" Multiplicity="0..1" />
+          <End Role="VonalBuszSofor" Type="Self.VonalBuszSofor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="VonalBuszSofor">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="trafficEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Buszs" EntityType="Self.Busz" />
+          <EntitySet Name="BuszAllapots" EntityType="Self.BuszAllapot" />
+          <EntitySet Name="Garazs" EntityType="Self.Garaz" />
+          <EntitySet Name="Jelzes" EntityType="Self.Jelze" />
+          <EntitySet Name="Megalloks" EntityType="Self.Megallok" />
+          <EntitySet Name="Sofors" EntityType="Self.Sofor" />
+          <EntitySet Name="Uzenets" EntityType="Self.Uzenet" />
+          <EntitySet Name="Vonals" EntityType="Self.Vonal" />
+          <EntitySet Name="VonalBuszs" EntityType="Self.VonalBusz" />
+          <EntitySet Name="VonalBuszSofors" EntityType="Self.VonalBuszSofor" />
+          <AssociationSet Name="fk_garazs1" Association="Self.fk_garazs1">
+            <End Role="Busz" EntitySet="Buszs" />
+            <End Role="Garazs" EntitySet="Garazs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_uzenet1" Association="Self.fk_uzenet1">
+            <End Role="Busz" EntitySet="Buszs" />
+            <End Role="Uzenet" EntitySet="Uzenets" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbusz1" Association="Self.fk_vonalbusz1">
+            <End Role="Busz" EntitySet="Buszs" />
+            <End Role="VonalBusz" EntitySet="VonalBuszs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbuszsofor1" Association="Self.fk_vonalbuszsofor1">
+            <End Role="Busz" EntitySet="Buszs" />
+            <End Role="VonalBuszSofor" EntitySet="VonalBuszSofors" />
+          </AssociationSet>
+          <AssociationSet Name="fk_garazs2" Association="Self.fk_garazs2">
+            <End Role="BuszAllapot" EntitySet="BuszAllapots" />
+            <End Role="Garazs" EntitySet="Garazs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_uzenet4" Association="Self.fk_uzenet4">
+            <End Role="Jelzes" EntitySet="Jelzes" />
+            <End Role="Uzenet" EntitySet="Uzenets" />
+          </AssociationSet>
+          <AssociationSet Name="fk_uzenet3" Association="Self.fk_uzenet3">
+            <End Role="Sofor" EntitySet="Sofors" />
+            <End Role="Uzenet" EntitySet="Uzenets" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbuszsofor3" Association="Self.fk_vonalbuszsofor3">
+            <End Role="Sofor" EntitySet="Sofors" />
+            <End Role="VonalBuszSofor" EntitySet="VonalBuszSofors" />
+          </AssociationSet>
+          <AssociationSet Name="fk_uzenet2" Association="Self.fk_uzenet2">
+            <End Role="Vonal" EntitySet="Vonals" />
+            <End Role="Uzenet" EntitySet="Uzenets" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbusz2" Association="Self.fk_vonalbusz2">
+            <End Role="Vonal" EntitySet="Vonals" />
+            <End Role="VonalBusz" EntitySet="VonalBuszs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalbuszsofor2" Association="Self.fk_vonalbuszsofor2">
+            <End Role="Vonal" EntitySet="Vonals" />
+            <End Role="VonalBuszSofor" EntitySet="VonalBuszSofors" />
+          </AssociationSet>
+          <EntitySet Name="VonalMegalloks" EntityType="trafficModel.VonalMegallok" />
+          <AssociationSet Name="fk_vonalmegallok" Association="trafficModel.fk_vonalmegallok">
+            <End Role="Megallok" EntitySet="Megalloks" />
+            <End Role="VonalMegallok" EntitySet="VonalMegalloks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vonalmegallok2" Association="trafficModel.fk_vonalmegallok2">
+            <End Role="Vonal" EntitySet="Vonals" />
+            <End Role="VonalMegallok" EntitySet="VonalMegalloks" />
+          </AssociationSet>
+          <EntitySet Name="Felszallas" EntityType="trafficModel.Felszalla" />
+          <AssociationSet Name="fk_felszallas2" Association="trafficModel.fk_felszallas2">
+            <End Role="Busz" EntitySet="Buszs" />
+            <End Role="Felszalla" EntitySet="Felszallas" />
+          </AssociationSet>
+          <AssociationSet Name="fk_felszallas" Association="trafficModel.fk_felszallas">
+            <End Role="Vonal" EntitySet="Vonals" />
+            <End Role="Felszalla" EntitySet="Felszallas" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="VonalMegallok">
+          <Key>
+            <PropertyRef Name="vonalMegalloiId" />
+          </Key>
+          <Property Name="vonalMegalloiId" Type="Int32" Nullable="false" />
+          <Property Name="megalloId" Type="Int32" />
+          <Property Name="vonalId" Type="Int32" />
+          <NavigationProperty Name="Megallok" Relationship="trafficModel.fk_vonalmegallok" FromRole="VonalMegallok" ToRole="Megallok" />
+          <NavigationProperty Name="Vonal" Relationship="trafficModel.fk_vonalmegallok2" FromRole="VonalMegallok" ToRole="Vonal" />
+        </EntityType>
+        <Association Name="fk_vonalmegallok">
+          <End Type="trafficModel.Megallok" Role="Megallok" Multiplicity="0..1" />
+          <End Type="trafficModel.VonalMegallok" Role="VonalMegallok" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Megallok">
+              <PropertyRef Name="megalloId" />
+            </Principal>
+            <Dependent Role="VonalMegallok">
+              <PropertyRef Name="megalloId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vonalmegallok2">
+          <End Type="trafficModel.Vonal" Role="Vonal" Multiplicity="0..1" />
+          <End Type="trafficModel.VonalMegallok" Role="VonalMegallok" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="VonalMegallok">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Felszalla">
+          <Key>
+            <PropertyRef Name="felszallasId" />
+          </Key>
+          <Property Name="felszallasId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vonalId" Type="Int32" />
+          <Property Name="buszId" Type="Int32" />
+          <Property Name="datum" Type="DateTime" Precision="3" />
+          <Property Name="lon" Type="Decimal" Precision="10" Scale="5" />
+          <Property Name="lat" Type="Decimal" Precision="10" Scale="5" />
+          <NavigationProperty Name="Busz" Relationship="trafficModel.fk_felszallas2" FromRole="Felszalla" ToRole="Busz" />
+          <NavigationProperty Name="Vonal" Relationship="trafficModel.fk_felszallas" FromRole="Felszalla" ToRole="Vonal" />
+        </EntityType>
+        <Association Name="fk_felszallas2">
+          <End Type="trafficModel.Busz" Role="Busz" Multiplicity="0..1" />
+          <End Type="trafficModel.Felszalla" Role="Felszalla" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Busz">
+              <PropertyRef Name="buszId" />
+            </Principal>
+            <Dependent Role="Felszalla">
+              <PropertyRef Name="buszId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_felszallas">
+          <End Type="trafficModel.Vonal" Role="Vonal" Multiplicity="0..1" />
+          <End Type="trafficModel.Felszalla" Role="Felszalla" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vonal">
+              <PropertyRef Name="vonalId" />
+            </Principal>
+            <Dependent Role="Felszalla">
+              <PropertyRef Name="vonalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="trafficModelStoreContainer" CdmEntityContainer="trafficEntities">
+          <EntitySetMapping Name="Buszs">
+            <EntityTypeMapping TypeName="trafficModel.Busz">
+              <MappingFragment StoreEntitySet="Busz">
+                <ScalarProperty Name="buszId" ColumnName="buszId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BuszAllapots">
+            <EntityTypeMapping TypeName="trafficModel.BuszAllapot">
+              <MappingFragment StoreEntitySet="BuszAllapot">
+                <ScalarProperty Name="buszAllapotId" ColumnName="buszAllapotId" />
+                <ScalarProperty Name="buszAllapot1" ColumnName="buszAllapot" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Garazs">
+            <EntityTypeMapping TypeName="trafficModel.Garaz">
+              <MappingFragment StoreEntitySet="Garazs">
+                <ScalarProperty Name="garazsid" ColumnName="garazsid" />
+                <ScalarProperty Name="buszId" ColumnName="buszId" />
+                <ScalarProperty Name="buszAllapotId" ColumnName="buszAllapotId" />
+                <ScalarProperty Name="datum" ColumnName="datum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Jelzes">
+            <EntityTypeMapping TypeName="trafficModel.Jelze">
+              <MappingFragment StoreEntitySet="Jelzes">
+                <ScalarProperty Name="jelzesId" ColumnName="jelzesId" />
+                <ScalarProperty Name="jelzesNev" ColumnName="jelzesNev" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Megalloks">
+            <EntityTypeMapping TypeName="trafficModel.Megallok">
+              <MappingFragment StoreEntitySet="Megallok">
+                <ScalarProperty Name="megalloId" ColumnName="megalloId" />
+                <ScalarProperty Name="lon" ColumnName="lon" />
+                <ScalarProperty Name="lat" ColumnName="lat" />
+                <ScalarProperty Name="megalloNev" ColumnName="megalloNev" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sofors">
+            <EntityTypeMapping TypeName="trafficModel.Sofor">
+              <MappingFragment StoreEntitySet="Sofor">
+                <ScalarProperty Name="soforId" ColumnName="soforId" />
+                <ScalarProperty Name="soforNev" ColumnName="soforNev" />
+                <ScalarProperty Name="soforJelszo" ColumnName="soforJelszo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Uzenets">
+            <EntityTypeMapping TypeName="trafficModel.Uzenet">
+              <MappingFragment StoreEntitySet="Uzenet">
+                <ScalarProperty Name="uzenetId" ColumnName="uzenetId" />
+                <ScalarProperty Name="jelzesId" ColumnName="jelzesId" />
+                <ScalarProperty Name="soforId" ColumnName="soforId" />
+                <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+                <ScalarProperty Name="buszId" ColumnName="buszId" />
+                <ScalarProperty Name="datum" ColumnName="datum" />
+                <ScalarProperty Name="lon" ColumnName="lon" />
+                <ScalarProperty Name="lat" ColumnName="lat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vonals">
+            <EntityTypeMapping TypeName="trafficModel.Vonal">
+              <MappingFragment StoreEntitySet="Vonal">
+                <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VonalBuszs">
+            <EntityTypeMapping TypeName="trafficModel.VonalBusz">
+              <MappingFragment StoreEntitySet="VonalBusz">
+                <ScalarProperty Name="vonalbuszId" ColumnName="vonalbuszId" />
+                <ScalarProperty Name="buszId" ColumnName="buszId" />
+                <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+                <ScalarProperty Name="datum" ColumnName="datum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VonalBuszSofors">
+            <EntityTypeMapping TypeName="trafficModel.VonalBuszSofor">
+              <MappingFragment StoreEntitySet="VonalBuszSofor">
+                <ScalarProperty Name="vonalbuszsoforId" ColumnName="vonalbuszsoforId" />
+                <ScalarProperty Name="buszId" ColumnName="buszId" />
+                <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+                <ScalarProperty Name="soforId" ColumnName="soforId" />
+                <ScalarProperty Name="datum" ColumnName="datum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VonalMegalloks">
+            <EntityTypeMapping TypeName="trafficModel.VonalMegallok">
+              <MappingFragment StoreEntitySet="VonalMegallok">
+                <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+                <ScalarProperty Name="megalloId" ColumnName="megalloId" />
+                <ScalarProperty Name="vonalMegalloiId" ColumnName="vonalMegalloiId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Felszallas">
+            <EntityTypeMapping TypeName="trafficModel.Felszalla">
+              <MappingFragment StoreEntitySet="Felszallas">
+                <ScalarProperty Name="lat" ColumnName="lat" />
+                <ScalarProperty Name="lon" ColumnName="lon" />
+                <ScalarProperty Name="datum" ColumnName="datum" />
+                <ScalarProperty Name="buszId" ColumnName="buszId" />
+                <ScalarProperty Name="vonalId" ColumnName="vonalId" />
+                <ScalarProperty Name="felszallasId" ColumnName="felszallasId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

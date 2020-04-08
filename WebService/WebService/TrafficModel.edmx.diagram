@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1fb0c13ab59b41b7b022d2ab9e04ca28" Name="Diagram1">
+        <EntityTypeShape EntityType="trafficModel.Busz" Width="1.5" PointX="0.75" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="trafficModel.BuszAllapot" Width="1.5" PointX="0.75" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="trafficModel.Garaz" Width="1.5" PointX="3" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="trafficModel.Jelze" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="trafficModel.Megallok" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="trafficModel.Sofor" Width="1.5" PointX="3.75" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="trafficModel.Uzenet" Width="1.5" PointX="6" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="trafficModel.Vonal" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="trafficModel.VonalBusz" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="trafficModel.VonalBuszSofor" Width="1.5" PointX="3" PointY="10.625" IsExpanded="true" />
+        <AssociationConnector Association="trafficModel.fk_garazs1" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_uzenet1" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_vonalbusz1" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_vonalbuszsofor1" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_garazs2" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_uzenet4" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_uzenet3" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_vonalbuszsofor3" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_uzenet2" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_vonalbusz2" ManuallyRouted="false" />
+        <AssociationConnector Association="trafficModel.fk_vonalbuszsofor2" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="trafficModel.VonalMegallok" Width="1.5" PointX="6" PointY="2.625" />
+        <AssociationConnector Association="trafficModel.fk_vonalmegallok" />
+        <AssociationConnector Association="trafficModel.fk_vonalmegallok2" />
+        <EntityTypeShape EntityType="trafficModel.Felszalla" Width="1.5" PointX="9" PointY="5.25" />
+        <AssociationConnector Association="trafficModel.fk_felszallas2" />
+        <AssociationConnector Association="trafficModel.fk_felszallas" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,151 @@
+﻿@model  WebTraffic.Models.NewBusLineModel
+
+@{
+    ViewBag.Title = "BusLineDriver";
+}
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/app")
+}
+
+@Styles.Render("~/Content/Site.css")
+
+<script src="bootstrap/js/bootrstap.min.js"></script>
+<script src="~/Scripts/knockout-3.5.1.js"></script>
+<script src="~/Scripts/knockout-3.5.1.debug.js"></script> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+
+<style type="text/css">
+    .title {
+        padding-bottom: 30px;
+        padding-top: 20px;
+        text-align: center;
+        color: #003366;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    .backgroung {
+        background-color: #d1d1e0;
+    }
+
+    .myForm {
+        margin-left:300px;
+    }
+
+    #newBus {
+        background-color: #9f9fbf;
+        width: 300px;
+        margin-left: 163px;
+    }
+
+    .newBusLineDriver {
+        margin-left: 247px;
+    }
+
+    .block {
+        z-index: 9999;
+        cursor: move;
+    }
+</style>
+
+<script>
+    function newBusLine() {
+        $(document).ready(function () {
+            $("#newBus").click(function () {
+                var DriverId = $("#driver").val();
+                var Line = $("#line").val();
+                var Bus = $("#bus").val();
+                var Date = $("#date").val();  
+                try {
+                    $.ajax({
+                        url: "http://localhost:50500/api/busdriver",
+                        type: 'POST',
+                        data: JSON.stringify({
+                            "buszId": Bus,
+                            "soforId": DriverId,
+                            "vonalId": Line,
+                            "datum": Date
+                        }),
+                        contentType: 'application/json; charset=utf-8',
+                        success: successCallback
+                    });
+                } catch (e) {
+                    window.location.href = "http://localhost:50500/BusLineDriver/BusLineDriver";
+                }  
+
+                function successCallback(data) {
+                    window.location.href = "http://localhost:50500/BusLineDriver/BusLineDriver";
+                } 
+            });
+        });
+    }
+</script>
+
+<body class="backgroung">
+
+    <div class="row">
+        <h1 class="title">Buszok menetbe állítása</h1>
+    </div>
+
+    <div class="row myForm">
+
+        <div class="form-horizontal">
+
+            <div class="form-group">
+
+                <label class="control-label col-md-2">Sofőr</label>
+
+                <div class="col-md-10">
+                    <select class="form-control" id="driver"
+                            data-bind="options: allDriver, optionsText: 'DriverName' ,optionsValue: 'Id', value: 'Id',
+                                optionsCaption: 'Válassza ki a sofört!'"></select>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="control-label col-md-2">Vonal</label>
+
+                <div class="col-md-10">
+                    <select class="form-control" id="line"
+                            data-bind="options: lines, optionsText: 'Line' ,optionsValue: 'Line', value: 'Line',
+                                optionsCaption: 'Válassza ki a vonalat!'"></select>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="control-label col-md-2">Busz</label>
+
+                <div class=" col-md-10">
+                    <select class="form-control" id="bus"
+                            data-bind="options: garage, optionsText: 'BusId', optionsValue: 'BusId', value: 'BusId',
+                                optionsCaption: 'Válassza ki a buszt!'"></select>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="control-label col-md-2">Dátum</label>
+
+                <div class="col-md-10">
+
+                    <input class="form-control" type="datetime-local" id="date" />
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <input type="button" value="Létrehoz" id="newBus" class="btn btn-default" onclick="newBusLine();" />
+            </div>
+
+        </div>
+    </div> 
+
+</body>
