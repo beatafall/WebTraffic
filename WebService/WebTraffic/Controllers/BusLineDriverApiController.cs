@@ -30,7 +30,7 @@ namespace WebTraffic.Controllers
         public IHttpActionResult Delete(int id)
         {
             if (id <= 0)
-                return BadRequest("Not a valid student id");
+                return BadRequest("Not a valid busLineDriverId");
 
             using (var DB = new trafficEntities())
             {

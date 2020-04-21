@@ -60,7 +60,7 @@
                 var Date = $("#date").val();  
                 try {
                     $.ajax({
-                        url: "http://localhost:50500/api/busdriver",
+                        url: "http://localhost:50700/api/busdriver",
                         type: 'POST',
                         data: JSON.stringify({
                             "buszId": Bus,
@@ -71,12 +71,23 @@
                         contentType: 'application/json; charset=utf-8',
                         success: successCallback
                     });
+                  
                 } catch (e) {
-                    window.location.href = "http://localhost:50500/BusLineDriver/BusLineDriver";
+                    window.location.href = "http://localhost:50700/BusLineDriver/BusLineDriver";
                 }  
 
                 function successCallback(data) {
-                    window.location.href = "http://localhost:50500/BusLineDriver/BusLineDriver";
+                    $.ajax({
+                        url: "http://localhost:50700/api/busdriver/" + Bus,
+                        type: 'PUT',
+                        data: JSON.stringify({
+                            "buszId": Bus,
+                            "buszAllapotId": 1,
+                            "datum": Date
+                        }),
+                        contentType: 'application/json; charset=utf-8',
+                    });
+                    window.location.href = "http://localhost:50700/BusLineDriver/BusLineDriver";
                 } 
             });
         });

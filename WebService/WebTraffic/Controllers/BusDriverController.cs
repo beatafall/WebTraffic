@@ -43,27 +43,43 @@ namespace WebTraffic.Controllers
                 db.SaveChanges();
             }
         }
-        
-       /* public IHttpActionResult PostNewBusLineDriver(BusLineDriverModel newBusLineDriver)
-         {
-             if (!ModelState.IsValid)
-                 return BadRequest("Not a valid model");
 
-             using (trafficEntities db = new trafficEntities())
-             {
-                 db.VonalBuszSofors.Add(new VonalBuszSofor()
-                 {
-                     vonalbuszsoforId = newBusLineDriver.Id,
-                     buszId = newBusLineDriver.Bus,
-                     vonalId = newBusLineDriver.Line,
-                     soforId = newBusLineDriver.DriverId,
-                     datum = newBusLineDriver.Date
-                 });
+        [HttpPut]
+        public void Put(int id, [FromBody]Garaz bus)
+        {
+            using (trafficEntities dbContext = new trafficEntities())
+            {
+                var entity = dbContext.Garazs.FirstOrDefault(e => e.buszId == id);
+                entity.buszId = bus.buszId;
+                entity.buszAllapotId = bus.buszAllapotId.Value;
+                entity.datum = bus.datum.Value;
+                dbContext.SaveChanges();
+            }
+        }
 
-                db.SaveChanges();
-             }
+        /* public IHttpActionResult PostNewBusLineDriver(BusLineDriverModel newBusLineDriver)
+          {
+              if (!ModelState.IsValid)
+                  return BadRequest("Not a valid model");
 
-             return Ok();
-         }*/
+              using (trafficEntities db = new trafficEntities())
+              {
+                  db.VonalBuszSofors.Add(new VonalBuszSofor()
+                  {
+                      vonalbuszsoforId = newBusLineDriver.Id,
+                      buszId = newBusLineDriver.Bus,
+                      vonalId = newBusLineDriver.Line,
+                      soforId = newBusLineDriver.DriverId,
+                      datum = newBusLineDriver.Date
+                  });
+
+                 db.SaveChanges();
+              }
+
+              return Ok();
+          }*/
+
+
+
     }
 }

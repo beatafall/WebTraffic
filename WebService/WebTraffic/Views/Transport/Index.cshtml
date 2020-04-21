@@ -149,7 +149,7 @@
                 var Date = $("#date").val();
                 try {
                     $.ajax({
-                        url: "http://localhost:50500/api/busdriver",
+                        url: "http://localhost:50700/api/busdriver",
                         type: 'POST',
                         data: JSON.stringify({
                             "buszId": Bus,
@@ -160,12 +160,22 @@
                         contentType: 'application/json; charset=utf-8',
                         success: successCallback
                     });
+                    $.ajax({
+                        url: "http://localhost:50700/api/busdriver/" + Bus,
+                        type: 'PUT',
+                        data: JSON.stringify({
+                            "buszId": Bus,
+                            "buszAllapotId": 1,
+                            "datum": Date
+                        }),
+                        contentType: 'application/json; charset=utf-8',
+                    });
                 }
                 catch (e) {
-                    window.location.href = "http://localhost:50500";
+                    window.location.href = "http://localhost:50700";
                 }  
                 function successCallback(data) {
-                    document.getElementById("msg").style.visibility = "visible";      
+                    document.getElementById("msg").style.visibility = "visible";     
                 }  
             });
         });
@@ -218,7 +228,7 @@
                         var busImg = "http://maps.google.com/mapfiles/kml/shapes/bus.png";
                            
                         $.ajax({
-                            url: "http://localhost:50500/api/busesontheroad/" + Line,
+                            url: "http://localhost:50700/api/busesontheroad/" + Line,
                             type: 'GET',
                             success: function (data) {
 
@@ -250,7 +260,7 @@
                         var Line = $("#lines").val();
 
                         $.ajax({
-                            url: "http://localhost:50500/api/LineStation/" + Line,
+                            url: "http://localhost:50700/api/LineStation/" + Line,
                             type: 'GET',
                             success: function (data) {
 
