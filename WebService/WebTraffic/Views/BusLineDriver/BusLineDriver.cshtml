@@ -48,9 +48,46 @@
         z-index: 9999;
         cursor: move;
     }
+
+    #errorMsgSpanB, #errorMsgSpanL, #errorMsgSpanD, #errorMsgSpanDate{
+        color:red;
+        padding-left:50px;
+    }
+
 </style>
 
 <script>
+    function validateForm() {
+        var selectedvaldriver = $('#driver').find(":selected").text();
+        var selectedvalbus = $('#bus').find(":selected").text();
+        var selectedvalline = $('#line').find(":selected").text();
+        var selecteddate = $('#date').val();
+
+        if (selectedvaldriver == "Válassza ki a sofőrt!") {
+            $("#errorMsgSpanD").text("Sofőr kiválasztása kötelező!");
+            return false;
+        }
+
+        if (selectedvalline == "Válassza ki a vonalat!") {
+            $("#errorMsgSpanL").text("Vonal kiválasztása kötelező!");
+            return false;
+        }
+
+        if (selectedvalbus == "Válassza ki a buszt!") {
+            $("#errorMsgSpanB").text("Busz kiválasztása kötelező!");
+            return false;
+        }
+
+        if (selecteddate == null) {
+            $("#errorMsgSpanDate").text("Dátum megadása kötelező!");
+            return false;
+        }
+        else {
+            newBusLine();
+        }
+
+    }
+
     function newBusLine() {
         $(document).ready(function () {
             $("#newBus").click(function () {
@@ -60,7 +97,7 @@
                 var Date = $("#date").val();  
                 try {
                     $.ajax({
-                        url: "http://localhost:50700/api/busdriver",
+                        url: "http://localhost:50900/api/busdriver",
                         type: 'POST',
                         data: JSON.stringify({
                             "buszId": Bus,
@@ -73,12 +110,12 @@
                     });
                   
                 } catch (e) {
-                    window.location.href = "http://localhost:50700/BusLineDriver/BusLineDriver";
+                    window.location.href = "http://localhost:50900/BusLineDriver/BusLineDriver";
                 }  
 
                 function successCallback(data) {
                     $.ajax({
-                        url: "http://localhost:50700/api/busdriver/" + Bus,
+                        url: "http://localhost:50900/api/busdriver/" + Bus,
                         type: 'PUT',
                         data: JSON.stringify({
                             "buszId": Bus,
@@ -87,7 +124,7 @@
                         }),
                         contentType: 'application/json; charset=utf-8',
                     });
-                    window.location.href = "http://localhost:50700/BusLineDriver/BusLineDriver";
+                    window.location.href = "http://localhost:50900/BusLineDriver/BusLineDriver";
                 } 
             });
         });
@@ -97,7 +134,7 @@
 <body class="backgroung">
 
     <div class="row">
-        <h1 class="title">Buszok menetbe állítása</h1>
+        <h1 class="title">Munkaprogram beosztása a sofőrök között</h1>
     </div>
 
     <div class="row myForm">
@@ -109,9 +146,10 @@
                 <label class="control-label col-md-2">Sofőr</label>
 
                 <div class="col-md-10">
-                    <select class="form-control" id="driver"
+                    <select class="form-control" id="driver" name="driver" asp-for="error1"
                             data-bind="options: allDriver, optionsText: 'DriverName' ,optionsValue: 'Id', value: 'Id',
-                                optionsCaption: 'Válassza ki a sofört!'"></select>
+                                optionsCaption: 'Válassza ki a sofőrt!'"></select>
+                    <span id="errorMsgSpanD" asp-validation-for="errordriver"></span>
                 </div>
 
             </div>
@@ -124,6 +162,7 @@
                     <select class="form-control" id="line"
                             data-bind="options: lines, optionsText: 'Line' ,optionsValue: 'Line', value: 'Line',
                                 optionsCaption: 'Válassza ki a vonalat!'"></select>
+                    <span id="errorMsgSpanL" asp-validation-for="errorline"></span>
                 </div>
 
             </div>
@@ -136,6 +175,7 @@
                     <select class="form-control" id="bus"
                             data-bind="options: garage, optionsText: 'BusId', optionsValue: 'BusId', value: 'BusId',
                                 optionsCaption: 'Válassza ki a buszt!'"></select>
+                    <span id="errorMsgSpanB" asp-validation-for="errorbus"></span>
                 </div>
 
             </div>
@@ -147,15 +187,15 @@
                 <div class="col-md-10">
 
                     <input class="form-control" type="datetime-local" id="date" />
+                    <span id="errorMsgSpanDate" asp-validation-for="errordate"></span>
 
                 </div>
 
             </div>
 
             <div class="form-group">
-                <input type="button" value="Létrehoz" id="newBus" class="btn btn-default" onclick="newBusLine();" />
+                <input type="button" value="Létrehoz" id="newBus" class="btn btn-default" onclick="validateForm();" />
             </div>
-
         </div>
     </div> 
 

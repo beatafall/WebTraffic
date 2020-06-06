@@ -20,7 +20,7 @@
     <Property Name="felszallasId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="vonalId" Type="int" />
     <Property Name="buszId" Type="int" />
-    <Property Name="datum" Type="datetime" />
+    <Property Name="datum" Type="datetime2" Precision="7" />
     <Property Name="lon" Type="numeric" Precision="10" Scale="5" />
     <Property Name="lat" Type="numeric" Precision="10" Scale="5" />
   </EntityType>
@@ -53,7 +53,7 @@
     <Key>
       <PropertyRef Name="soforId" />
     </Key>
-    <Property Name="soforId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="soforId" Type="int" Nullable="false" />
     <Property Name="soforNev" Type="varchar" MaxLength="50" />
     <Property Name="soforJelszo" Type="varchar" MaxLength="50" />
   </EntityType>
@@ -103,30 +103,6 @@
     <Property Name="megalloId" Type="int" />
     <Property Name="vonalId" Type="int" />
   </EntityType>
-  <Association Name="fk_felszallas">
-    <End Role="Vonal" Type="Self.Vonal" Multiplicity="0..1" />
-    <End Role="Felszallas" Type="Self.Felszallas" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Vonal">
-        <PropertyRef Name="vonalId" />
-      </Principal>
-      <Dependent Role="Felszallas">
-        <PropertyRef Name="vonalId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_felszallas2">
-    <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
-    <End Role="Felszallas" Type="Self.Felszallas" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Busz">
-        <PropertyRef Name="buszId" />
-      </Principal>
-      <Dependent Role="Felszallas">
-        <PropertyRef Name="buszId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="fk_garazs1">
     <End Role="Busz" Type="Self.Busz" Multiplicity="0..1" />
     <End Role="Garazs" Type="Self.Garazs" Multiplicity="*" />
@@ -296,14 +272,6 @@
     <EntitySet Name="VonalBusz" EntityType="Self.VonalBusz" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VonalBuszSofor" EntityType="Self.VonalBuszSofor" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VonalMegallok" EntityType="Self.VonalMegallok" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="fk_felszallas" Association="Self.fk_felszallas">
-      <End Role="Vonal" EntitySet="Vonal" />
-      <End Role="Felszallas" EntitySet="Felszallas" />
-    </AssociationSet>
-    <AssociationSet Name="fk_felszallas2" Association="Self.fk_felszallas2">
-      <End Role="Busz" EntitySet="Busz" />
-      <End Role="Felszallas" EntitySet="Felszallas" />
-    </AssociationSet>
     <AssociationSet Name="fk_garazs1" Association="Self.fk_garazs1">
       <End Role="Busz" EntitySet="Busz" />
       <End Role="Garazs" EntitySet="Garazs" />

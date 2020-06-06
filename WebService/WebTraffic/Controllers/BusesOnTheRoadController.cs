@@ -61,33 +61,20 @@ namespace WebTraffic.Controllers
 
         
         [HttpGet]
-        public IHttpActionResult GetLines(int line)
+        public IEnumerable<BusesOnTheRoadModel> GetLines(int id)
         {
-            BusesOnTheRoadModel lines = null;
-
-            using (var ctx = new trafficEntities())
-            {
-                lines = ctx.Felszallas
-                    .Where(s => s.vonalId == line)
-                    .Select(s => new BusesOnTheRoadModel()
-                    {
-                        Id = s.felszallasId,
-                        Line = s.Vonal.vonalId,
-                        Bus = s.Busz.buszId,
-                        Date = s.datum.Value,
-                        lon = s.lat.Value,
-                        lat = s.lon.Value
-                    }).FirstOrDefault<BusesOnTheRoadModel>();
-            }
-
-            if (lines == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(lines);
+            BusRepository busRepository = new BusRepository();
+            return busRepository.GetAllBusOnRoad().Where(g => g.vonalId == id)
+                .ToList().Select(s => new BusesOnTheRoadModel
+                {
+                    Id = s.felszallasId,
+                    Line = s.Vonal.vonalId,
+                    Bus = s.Busz.buszId,
+                    Date = s.datum.Value,
+                    lon = s.lat.Value,
+                    lat = s.lon.Value
+                });
         }
-        
-
+   
     }
     }

@@ -89,5 +89,11 @@ namespace WebService
             return DB.Felszallas.ToList();
         }
 
+        public List<VonalMegallok> GetLinesById(int id)
+        {
+            trafficEntities DB = new trafficEntities();
+            return DB.VonalMegalloks.Where(s => s.vonalId.Equals(id)).ToList();
+        }
+
     } 
 }

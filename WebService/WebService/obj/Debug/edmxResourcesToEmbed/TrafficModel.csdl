@@ -357,7 +357,7 @@
     <Property Name="felszallasId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="vonalId" Type="Int32" />
     <Property Name="buszId" Type="Int32" />
-    <Property Name="datum" Type="DateTime" Precision="3" />
+    <Property Name="datum" Type="DateTime" Precision="7" />
     <Property Name="lon" Type="Decimal" Precision="10" Scale="5" />
     <Property Name="lat" Type="Decimal" Precision="10" Scale="5" />
     <NavigationProperty Name="Busz" Relationship="trafficModel.fk_felszallas2" FromRole="Felszalla" ToRole="Busz" />

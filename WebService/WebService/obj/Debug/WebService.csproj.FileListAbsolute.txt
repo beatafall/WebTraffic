@@ -1,3 +1,4 @@
+C:\Users\BubixBubuBebe\source\repos\WebService\WebService\obj\Debug\WebService.csproj.CoreCompileInputs.cache
 C:\Users\BubixBubuBebe\source\repos\WebService\WebService\bin\Debug\WebService.dll.config
 C:\Users\BubixBubuBebe\source\repos\WebService\WebService\bin\Debug\WebService.dll
 C:\Users\BubixBubuBebe\source\repos\WebService\WebService\bin\Debug\WebService.pdb
@@ -5,8 +6,6 @@ C:\Users\BubixBubuBebe\source\repos\WebService\WebService\bin\Debug\EntityFramew
 C:\Users\BubixBubuBebe\source\repos\WebService\WebService\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\BubixBubuBebe\source\repos\WebService\WebService\bin\Debug\EntityFramework.xml
 C:\Users\BubixBubuBebe\source\repos\WebService\WebService\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\BubixBubuBebe\source\repos\WebService\WebService\obj\Debug\WebService.csprojAssemblyReference.cache
-C:\Users\BubixBubuBebe\source\repos\WebService\WebService\obj\Debug\WebService.csproj.CoreCompileInputs.cache
 C:\Users\BubixBubuBebe\source\repos\WebService\WebService\obj\Debug\WebService.csproj.CopyComplete
 C:\Users\BubixBubuBebe\source\repos\WebService\WebService\obj\Debug\WebService.dll
 C:\Users\BubixBubuBebe\source\repos\WebService\WebService\obj\Debug\WebService.pdb

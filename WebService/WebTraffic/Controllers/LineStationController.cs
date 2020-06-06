@@ -32,31 +32,22 @@ namespace WebTraffic.Controllers
                 });
         }
 
-        public IHttpActionResult GetLines(int line)
+       
+        public IEnumerable<LineStationModel> GetLines(int id)
         {
-            LineStationModel lines = null;
-
-            using (var ctx = new trafficEntities())
+            BusRepository busRepository = new BusRepository();
+            return busRepository.GetAllLineStation().Where(g => g.vonalId == id)
+                .ToList().Select(x => new LineStationModel
             {
-                lines = ctx.VonalMegalloks
-                    .Where(s => s.vonalId == line)
-                    .Select(s => new LineStationModel()
-                    {
-                        Id = s.vonalMegalloiId,
-                        lineId = s.Vonal.vonalId,
-                        stationId = s.Megallok.megalloId,
-                        stationName = s.Megallok.megalloNev,
-                        lon = s.Megallok.lat.Value,
-                        lat = s.Megallok.lon.Value
-                    }).FirstOrDefault<LineStationModel>();
-            }
-
-            if (lines == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(lines);
+                Id = x.vonalMegalloiId,
+                lineId = x.Vonal.vonalId,
+                stationId = x.Megallok.megalloId,
+                stationName = x.Megallok.megalloNev,
+                lon = x.Megallok.lat.Value,
+                lat = x.Megallok.lon.Value
+            });
         }
+
+
     }
 }

@@ -18,7 +18,7 @@
     }
 
     .infoDiv {
-        height: 170px;
+        height: 180px;
         width: 300px;
         -webkit-user-select: none;
         background-color: white;
@@ -119,6 +119,12 @@
         margin-top: 10px;
         padding: 15px;
     }
+
+    #errorMsgSpanB, #errorMsgSpanL, #errorMsgSpanD, #errorMsgSpanDate {
+        color: red;
+        padding-left: 50px;
+    }
+
 </style>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -149,7 +155,7 @@
                 var Date = $("#date").val();
                 try {
                     $.ajax({
-                        url: "http://localhost:50700/api/busdriver",
+                        url: "http://localhost:50900/api/busdriver",
                         type: 'POST',
                         data: JSON.stringify({
                             "buszId": Bus,
@@ -161,7 +167,7 @@
                         success: successCallback
                     });
                     $.ajax({
-                        url: "http://localhost:50700/api/busdriver/" + Bus,
+                        url: "http://localhost:50900/api/busdriver/" + Bus,
                         type: 'PUT',
                         data: JSON.stringify({
                             "buszId": Bus,
@@ -172,13 +178,44 @@
                     });
                 }
                 catch (e) {
-                    window.location.href = "http://localhost:50700";
+                    window.location.href = "http://localhost:50900";
                 }  
                 function successCallback(data) {
                     document.getElementById("msg").style.visibility = "visible";     
                 }  
             });
         });
+    }
+
+    function validateForm() {
+        var selectedvaldriver = $('#driver').find(":selected").text();
+        var selectedvalbus = $('#bus').find(":selected").text();
+        var selectedvalline = $('#line').find(":selected").text();
+        var selecteddate = $('#date').val();
+
+        if (selectedvaldriver == "Válassza ki a sofőrt!") {
+            $("#errorMsgSpanD").text("Sofőr kiválasztása kötelező!");
+            return false;
+        }
+
+        if (selectedvalline == "Válassza ki a vonalat!") {
+            $("#errorMsgSpanL").text("Vonal kiválasztása kötelező!");
+            return false;
+        }
+
+        if (selectedvalbus == "Válassza ki a buszt!") {
+            $("#errorMsgSpanB").text("Busz kiválasztása kötelező!");
+            return false;
+        }
+
+        if (selecteddate == null) {
+            $("#errorMsgSpanDate").text("Dátum megadása kötelező!");
+            return false;
+        }
+        else {
+            newBusLine();
+        }
+
     }
 
 </script>
@@ -228,7 +265,7 @@
                         var busImg = "http://maps.google.com/mapfiles/kml/shapes/bus.png";
                            
                         $.ajax({
-                            url: "http://localhost:50700/api/busesontheroad/" + Line,
+                            url: "http://localhost:50900/api/busesontheroad/" + Line,
                             type: 'GET',
                             success: function (data) {
 
@@ -236,7 +273,7 @@
                                     var latlngStation = new google.maps.LatLng(value.lat, value.lon);
                                     var marker = new google.maps.Marker({
                                         position: latlngStation,
-                                        title: "A busz legutóbbi tartózkodósának ideje: " + value.Date,
+                                        title: "A " + value.Line + "-es vonal legutóbbi tartózkodósának ideje: " + value.Date,
                                         icon: {
                                             url: busImg,
                                             scaledSize: new google.maps.Size(40, 40)
@@ -260,7 +297,7 @@
                         var Line = $("#lines").val();
 
                         $.ajax({
-                            url: "http://localhost:50700/api/LineStation/" + Line,
+                            url: "http://localhost:50900/api/LineStation/" + Line,
                             type: 'GET',
                             success: function (data) {
 
@@ -318,7 +355,7 @@
                                 {
                                  <text>
                                     "<div class='infoDiv'><h4> Üzenet: </h4>"
-                                    + "<div><h6>Soför neve: " + '@item.DriverName' + "</h6>"
+                                    + "<div><h6>Sofőr neve: " + '@item.DriverName' + "</h6>"
                                     + "<h6>Jelzés: " + '@item.MessageTypeName' + "</h6>"
                                     + "<h6>Vonal száma: " + '@item.Line' + "</h6>"
                                     + "<h6>Busz száma: " + '@item.Bus' + "</h6>"
@@ -360,26 +397,30 @@
                             Sofőr:
                             <select class="form-control" id="driver"
                                     data-bind="options: driver, optionsText: 'DriverName' ,optionsValue: 'Id', value: 'Id',
-                                    optionsCaption: 'Válassza ki a sofört!'"></select>
+                                    optionsCaption: 'Válassza ki a sofőrt!'"></select>
+                            <span id="errorMsgSpanD" asp-validation-for="errordriver"></span>
                         </div>
                         <div class="form-group">
                             Vonal:
                             <select class="form-control" id="line"
                                     data-bind="options: lines, optionsText: 'Line' ,optionsValue: 'Line', value: 'Line',
                                 optionsCaption: 'Válassza ki a vonalat!'"></select>
+                            <span id="errorMsgSpanL" asp-validation-for="errorline"></span>
                         </div>
                         <div class="form-group">
                             Busz:
                             <select class="form-control" id="bus"
                                     data-bind="options: garage, optionsText: 'BusId', optionsValue: 'BusId', value: 'BusId',
                                     optionsCaption: 'Válassza ki a buszt!'"></select>
+                            <span id="errorMsgSpanB" asp-validation-for="errorbus"></span>
                         </div>
                         <div class="form-group">
                             Dátum:
                             <input class="form-control" type="datetime-local" id="date" />
+                            <span id="errorMsgSpanDate" asp-validation-for="errordate"></span>
                         </div>
                     </form>
-                    <button type="submit" id="newBus" class="btn btn-primary send" onclick="newBusLine();">Küldés</button>
+                    <button type="submit" id="newBus" class="btn btn-primary send" onclick="validateForm();">Küldés</button>
                     <p id="msg" style="visibility:hidden; padding-left: 40px; padding-top: 5px; padding-bottom:10px; color:darkred; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size:16px;"> Sikeresen elküldte az üzenetet! </p> 
                 </div>
             </div>
@@ -408,7 +449,7 @@
                         else
                         {
                             <div class="drivermessage-item">
-                                <h5>Soför neve: @item.DriverName</h5>
+                                <h5>Sofőr neve: @item.DriverName</h5>
                                 <h5>Jelzés: @item.MessageTypeName</h5>
                                 <h5>Vonal száma: @item.Line</h5>
                                 <h5>Busz száma: @item.Bus</h5>
